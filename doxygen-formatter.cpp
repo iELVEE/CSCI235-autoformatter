@@ -14,8 +14,13 @@ Credits     : N/A
 #include <filesystem>
 #include <vector>
 #include <cctype>
+#include <unordered_map>
 
-enum Doxs { AS_IS, JAVADOC, QT };
+enum Doxs { AS_IS, JAVADOC, QT, BANNER };
+std::unordered_map<Doxs, std::string> comment_beginner_ = { {AS_IS, "/**"}, {JAVADOC, "/**"},   {QT, "/*!"},    {BANNER,  "/************************************************"} };
+std::unordered_map<Doxs, std::string> comment_middle_   = { {AS_IS, ""},   {JAVADOC, "*"},     {QT, "*"},      {BANNER,  " *"} };
+std::unordered_map<Doxs, std::string> comment_ender_    = { {AS_IS, "*/"},  {JAVADOC, "*/"},    {QT, "*/"},     {BANNER,  " ***********************************************/"} };
+
 std::vector<std::string> filter_types = { ".cpp", ".hpp", ".txt" };
 
 /***************************************************************************************************************************************
@@ -23,9 +28,9 @@ std::vector<std::string> filter_types = { ".cpp", ".hpp", ".txt" };
  **************************************************************************************************************************************/
 
 bool filter_ = true;
-// Display only hpp and cpp files.
+// Display only filtered file types.
 
-Doxs doxygen_style_ = JAVADOC;
+Doxs doxygen_style_ = AS_IS;
 // Use the specified doxygen comment style, AS_IS weill leave the comments as is with no modification.
 
 bool hpp_to_cpp_ = true;
@@ -34,13 +39,22 @@ bool hpp_to_cpp_ = true;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+
+
+
+
+
 /** Format a given line of the string to get rid of white spaces in comment blocks and leave the rest as is.
 * This function has 2 static variables to keep track of whether or not we are currently in a comment block or not and to know
 * whether or not the comment block has just ended. This is to know whether we should get rid of white spaces or leave them as
 * is. If we are in a comment block, we look for if the line is just white space and then remove it if it has no meaningful content.
 * If we are not in a comment block, we check for if the comment block has just ended, to get rid of the following empty line before
 * the function name. Lastly, we leave the line as is if neither conditions are true. The last bit of this function simply sets our
-* static flags true or false depending on if we find a "/*" or "*./" beginning/ending the comment block.
+* static flags true or false depending on if we find beginning/ending comment block characters.
+* An addition to this algorithm is changing the lines and characters to proper format, the checks are all the same.
+* Note      : order of setting the flags matters because if comment_block just ended is set before we check for, then we get rid of
+*             the comment block ending characters instead of the following empty line.
 * @param    : reference to a string, line of the input file to format
 * @post     : a modified string that is empty or contains the given line with an added new line for readability
 */
@@ -49,6 +63,7 @@ void formatLine(std::string& s)
     static bool in_comment_block = false;
     static bool comment_block_just_ended = false;
 
+    //in_comment_block flag isn't needed for /** since either way, it remains unmodified (unless changing to a different style)
     if (in_comment_block)
     {
         if (s.find_first_not_of(' ') == std::string::npos)
@@ -57,6 +72,14 @@ void formatLine(std::string& s)
         }
         else
         {
+            if (s.find("*/") != std::string::npos)
+            {
+                s = comment_ender_[doxygen_style_];
+            }
+            else
+            {
+                s = comment_middle_[doxygen_style_] + s;
+            }
             s += "\n";
         }
     }
@@ -67,14 +90,19 @@ void formatLine(std::string& s)
     }
     else
     {
+        if (s.find("/**") != std::string::npos)
+        {
+            s = comment_beginner_[doxygen_style_];
+        }
         s += "\n";
     }
 
-    if (s.find("/**") != std::string::npos)
+    //searching for new style's comment style since they have been converted by now
+    if (s.find(comment_beginner_[doxygen_style_]) != std::string::npos)
     {
         in_comment_block = true;
     }
-    else if (s.find("*/") != std::string::npos)
+    else if (s.find(comment_ender_[doxygen_style_]) != std::string::npos)
     {
         in_comment_block = false;
         comment_block_just_ended = true;
