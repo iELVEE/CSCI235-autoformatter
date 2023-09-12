@@ -113,6 +113,13 @@ std::vector<std::string> selectionMenu(std::string selected_path, bool listMode 
             i++;
         }
     }
+
+    if (listMode)
+    {
+        files.push_back("File not listed");
+        std::cout << "[" << i << "] " << "File not listed" << std::endl;
+    }
+
     return files;
 }
 
@@ -127,6 +134,10 @@ std::vector<std::string> select(std::vector<std::string> files)
     std::cout << "Please input the indexes of the file(s) you want to format (multiple files are separated by spaces) : ";
     while (std::cin >> file_index)
     {
+        if (file_index == files.size() - 1) {
+            std::cout << "What file would you like to format : ";
+            std::cin >> files.at(file_index);
+        }
         inputs.push_back(files.at(file_index));
         //break the infinite cin loop once enter is pressed, failbit prevents non int inputs
         if (std::iscntrl(std::cin.get()))
@@ -151,11 +162,13 @@ void routineOne()
     }
 }
 
-
+/** Take all files in a directory and format them.
+* @post     : all files in the directory formatted
+*/
 void routineTwo()
 {
     std::string path_name;
-    std::cout << "Please input the path to the desired folder : ";
+    std::cout << "Please input the path to the desired folder (absolute path or relative, e.g. ./sub_directory/target_directory) : ";
     std::cin >> path_name;
 
     std::vector<std::string> directory_files = selectionMenu(path_name);
