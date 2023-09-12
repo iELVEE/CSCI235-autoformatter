@@ -13,6 +13,7 @@ Credits     : N/A
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <cctype>
 
 
 /** Format a given line of the string to get rid of white spaces in comment blocks and leave the rest as is.
@@ -93,9 +94,10 @@ void routineOne()
 
 
 /** List all regular files in a given directory
-* @param string of directory
+* @param    : string of directory
+* @return   : vector of strings of all files in the directory
 */
-void selectionMenu(std::string selected_path)
+std::vector<std::string> selectionMenu(std::string selected_path, bool listMode = false)
 {
     std::vector<std::string> files;
     int i = 0;
@@ -104,19 +106,48 @@ void selectionMenu(std::string selected_path)
         if (f.is_regular_file())
         {
             files.push_back(f.path().string());
-            std::cout << "[" << i << "] " << f.path().string() << std::endl;
+            if (listMode)
+            {
+                std::cout << "[" << i << "] " << f.path().string() << std::endl;
+            }
             i++;
         }
     }
+    return files;
+}
+
+/** Take a variable number of input files selecting from given files and put them into a vector of selected file names
+ * @param   : vector of strings comprising of all files present in working directory
+ * @return  : vector of strings comprising of selected files
+*/
+std::vector<std::string> select(std::vector<std::string> files)
+{
+    std::vector<std::string> inputs;
+    int file_index;
+    std::cout << "Please input the indexes of the file(s) you want to format (multiple files are separated by spaces) : ";
+    while (std::cin >> file_index)
+    {
+        inputs.push_back(files.at(file_index));
+        //break the infinite cin loop once enter is pressed, failbit prevents non int inputs
+        if (std::iscntrl(std::cin.get()))
+        {
+            break;
+        }
+    }
+
+    for (const auto& f : inputs){
+        std::cout << f << std::endl;
+    }
+    return inputs;
 }
 
 int main()
 {
     int routine_index;
-    std::cout << "Would you like to read in a specific file [1] or all files in a folder [2] : ";
+    std::cout << "Would you like to read in specific file(s) [1] or all files in a folder [2] : ";
     std::cin >> routine_index;
     if (routine_index == 1) {
         //routineOne();
-        selectionMenu("./");
+        select(selectionMenu("./", true));
     }
 }
