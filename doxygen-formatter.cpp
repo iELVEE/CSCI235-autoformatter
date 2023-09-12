@@ -11,6 +11,8 @@ Credits     : N/A
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <filesystem>
+#include <vector>
 
 
 /** Format a given line of the string to get rid of white spaces in comment blocks and leave the rest as is.
@@ -89,12 +91,28 @@ void routineOne()
     formatted.close();
 }
 
+void selectionMenu(std::string selected_path)
+{
+    std::vector<std::string> files;
+    int i = 0;
+    for (const auto& f : std::filesystem::directory_iterator(selected_path))
+    {
+        if (f.is_regular_file())
+        {
+            files.push_back(f.path().string());
+            std::cout << "[" << i << "] " << f.path().string() << std::endl;
+            i++;
+        }
+    }
+}
+
 int main()
 {
     int routine_index;
     std::cout << "Would you like to read in a specific file [1] or all files in a folder [2] : ";
     std::cin >> routine_index;
     if (routine_index == 1) {
-        routineOne();
+        //routineOne();
+        selectionMenu("./");
     }
 }
