@@ -40,11 +40,6 @@ bool hpp_to_cpp_ = true;
 
 
 
-
-
-
-
-
 /** Format a given line of the string to get rid of white spaces in comment blocks and leave the rest as is.
 * This function has 2 static variables to keep track of whether or not we are currently in a comment block or not and to know
 * whether or not the comment block has just ended. This is to know whether we should get rid of white spaces or leave them as
@@ -137,6 +132,22 @@ void overwriteFile(std::string input_file)
         ofile.write(formatted_string.c_str(), formatted_string.length()-1);
     }
     ofile.close();
+
+
+    if (hpp_to_cpp_)
+    {
+        if (input_file.find(".hpp") != std::string::npos)
+        {
+            std::string cpp_correspondent = input_file.substr(0, input_file.find(".hpp")) + ".cpp";
+            ofile.open(cpp_correspondent);
+            if (ofile.is_open())
+            {
+                // length-1 because c_str conversion add an extra null character at the end
+                ofile.write(formatted_string.c_str(), formatted_string.length() - 1);
+            }
+            ofile.close();
+        }
+    }
 }
 
 
