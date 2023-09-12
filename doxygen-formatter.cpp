@@ -152,6 +152,19 @@ void routineOne()
 }
 
 
+void routineTwo()
+{
+    std::string path_name;
+    std::cout << "Please input the path to the desired folder : ";
+    std::cin >> path_name;
+
+    std::vector<std::string> directory_files = selectionMenu(path_name);
+    for (const auto& s : directory_files)
+    {
+        overwriteFile(s);
+    }
+}
+
 int main()
 {
     int routine_index;
@@ -159,5 +172,8 @@ int main()
     std::cin >> routine_index;
     if (routine_index == 1) {
         routineOne();
+    }
+    else if (routine_index == 2) {
+        routineTwo();
     }
 }
