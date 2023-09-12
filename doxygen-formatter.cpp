@@ -78,11 +78,13 @@ void formatLine(std::string& s)
             s += "\n";
         }
     }
+    //get rid of following empty line
     else if (comment_block_just_ended)
     {
         s = "";
         comment_block_just_ended = false;
     }
+    //leave as is (or convert)
     else
     {
         if (s.find("/**") != std::string::npos)
@@ -104,14 +106,14 @@ void formatLine(std::string& s)
     }
 }
 
-/** Replace the given file with the formatted version of the text inside.
-* @param    : string of the input file's name
-* @post     : the text inside the input file is changed completely to get rid of comment new lines
-*/
-void overwriteFile(std::string input_file)
-{
-    std::string formatted_string = "";
 
+/** Take an input file, and change a referenced string to be the formatted content of the file.
+* @param    : string of the input file's name
+* @param    : reference to the formatted string
+* @post     : the formatted string is changed to reflect the input file's content
+*/
+void turnContentIntoFormattedString(std::string input_file, std::string& formatted_string)
+{
     std::ifstream ifile(input_file);
     if (ifile.is_open())
     {
@@ -124,28 +126,42 @@ void overwriteFile(std::string input_file)
         }
     }
     ifile.close();
+}
 
-    std::ofstream ofile(input_file);
+/** Write the formatted string to be the content of an output file.
+* @param    : string of the output file's name
+* @param    : the text that will replace the output file's content
+* @post     : the output file is created or overwritten to be formatted
+*/
+void writeContentToFile(std::string output_file, std::string formatted_string)
+{
+    std::ofstream ofile(output_file);
     if (ofile.is_open())
     {
         // length-1 because c_str conversion add an extra null character at the end
-        ofile.write(formatted_string.c_str(), formatted_string.length()-1);
+        ofile.write(formatted_string.c_str(), formatted_string.length() - 1);
     }
     ofile.close();
+}
 
+/** Replace the given file with the formatted version of the text inside.
+* @param    : string of the input file's name
+* @post     : the text inside the input file is changed completely to get rid of comment new lines
+*/
+void overwriteFile(std::string input_file)
+{
+    std::string formatted_string = "";
+
+    turnContentIntoFormattedString(input_file, formatted_string);
+
+    writeContentToFile(input_file, formatted_string);
 
     if (hpp_to_cpp_)
     {
         if (input_file.find(".hpp") != std::string::npos)
         {
             std::string cpp_correspondent = input_file.substr(0, input_file.find(".hpp")) + ".cpp";
-            ofile.open(cpp_correspondent);
-            if (ofile.is_open())
-            {
-                // length-1 because c_str conversion add an extra null character at the end
-                ofile.write(formatted_string.c_str(), formatted_string.length() - 1);
-            }
-            ofile.close();
+            writeContentToFile(cpp_correspondent, formatted_string);
         }
     }
 }
