@@ -38,7 +38,7 @@
                 If the dagger type is not valid (i.e, is one of the following: 
                 [WOOD, BRONZE, IRON, STEEL, MITHRIL, ADAMANT, RUNE]), 
                 the variable should be set to WOOD. 
-**/
+*/
 setDagger
 
 
@@ -46,7 +46,7 @@ setDagger
 
 /**
   @return     : the string indicating the character's dagger type
-**/
+*/
 getDagger
 
 
@@ -60,7 +60,7 @@ getDagger
                [NONE, CUTPURSE, SHADOWBLADE, SILVERTONGUE], 
                do nothing and return false.
     @return   : true if setting the variable was successful, false otherwise.
-**/
+*/
 setFaction
 
 
@@ -68,7 +68,7 @@ setFaction
 
 /**
   @return  : the string indicating the character's Faction
-**/
+*/
 getFaction
 
 
@@ -77,15 +77,14 @@ getFaction
 /**
   @param  : a reference to boolean
   @post   : sets the private member variable indicating whether the character has a disguise
-**/
+*/
 setDisguise
 
 
 
 /**
   @return  : the visual aid flag
-**/
+*/
 hasDisguise
-
 
 
