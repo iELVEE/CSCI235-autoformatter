@@ -39,6 +39,20 @@ bool hpp_to_cpp_ = true;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+/**Check to see if the line has any characters aside from a white space.
+ * @param   : string to check through
+ * @return  : bool whether the string has something besides white space
+*/
+bool notWhiteSpace(std::string s)
+{
+    for (const unsigned char& c : s)
+    {
+        if (!std::isspace(c)){
+            return false;
+        }
+    }
+    return true;
+}
 
 /** Format a given line of the string to get rid of white spaces in comment blocks and leave the rest as is.
 * This function has 2 static variables to keep track of whether or not we are currently in a comment block or not and to know
@@ -61,7 +75,7 @@ void formatLine(std::string& s)
     //in_comment_block flag isn't needed for /** since either way, it remains unmodified (unless changing to a different style)
     if (in_comment_block)
     {
-        if (s.find_first_not_of(' ') == std::string::npos)
+        if (notWhiteSpace(s))
         {
             s = "";
         }
