@@ -91,6 +91,10 @@ void routineOne()
     formatted.close();
 }
 
+
+/** List all regular files in a given directory
+* @param string of directory
+*/
 void selectionMenu(std::string selected_path)
 {
     std::vector<std::string> files;
