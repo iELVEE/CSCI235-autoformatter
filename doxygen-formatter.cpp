@@ -63,37 +63,37 @@ void formatLine(std::string& s)
     }
 }
 
-/** Take an input text file and format it to a doxygen style file.
-* @pre      : text file to read
-* @post     : specified file in this style of commented documentation is created
+/** Replace the given file with the formatted version of the text inside.
+* @param    : string of the input file's name
+* @post     : the text inside the input file is changed completely to get rid of comment new lines
 */
-void routineOne()
+void overwriteFile(std::string input_file)
 {
-    std::string input_file_name, output_file_name;
-    std::cout << "Please input the file you would like to read : ";
-    std::cin >> input_file_name;
-    std::cout << "Please input the name of the file you would like to create : ";
-    std::cin >> output_file_name;
+    std::string formatted_string = "";
 
-    std::ifstream project_specs(input_file_name);
-    std::ofstream formatted(output_file_name);
-    if (project_specs.is_open()) 
+    std::ifstream ifile(input_file);
+    if (ifile.is_open())
     {
         std::string line;
-        while (project_specs.good())
+        while (ifile.good())
         {
-            std::getline(project_specs, line);
+            std::getline(ifile, line);
             formatLine(line);
-            formatted << line;
+            formatted_string += line;
         }
-        
     }
-    project_specs.close();
-    formatted.close();
+    ifile.close();
+
+    std::ofstream ofile(input_file);
+    if (ofile.is_open())
+    {
+        // length-1 because c_str conversion add an extra null character at the end
+        ofile.write(formatted_string.c_str(), formatted_string.length()-1);
+    }
+    ofile.close();
 }
 
-
-/** List all regular files in a given directory
+/** List all regular files in a given directory.
 * @param    : string of directory
 * @return   : vector of strings of all files in the directory
 */
@@ -116,7 +116,7 @@ std::vector<std::string> selectionMenu(std::string selected_path, bool listMode 
     return files;
 }
 
-/** Take a variable number of input files selecting from given files and put them into a vector of selected file names
+/** Take a variable number of input files selecting from given files and put them into a vector of selected file names.
  * @param   : vector of strings comprising of all files present in working directory
  * @return  : vector of strings comprising of selected files
 */
@@ -135,11 +135,22 @@ std::vector<std::string> select(std::vector<std::string> files)
         }
     }
 
-    for (const auto& f : inputs){
-        std::cout << f << std::endl;
-    }
     return inputs;
 }
+
+/** Take an input text file and format it to a doxygen style file.
+* @pre      : text file to read
+* @post     : specified file in this style of commented documentation is created
+*/
+void routineOne()
+{
+    std::vector<std::string> files_to_format = select(selectionMenu("./", true));
+    for (const auto& s : files_to_format)
+    {
+        overwriteFile(s);
+    }
+}
+
 
 int main()
 {
@@ -147,7 +158,6 @@ int main()
     std::cout << "Would you like to read in specific file(s) [1] or all files in a folder [2] : ";
     std::cin >> routine_index;
     if (routine_index == 1) {
-        //routineOne();
-        select(selectionMenu("./", true));
+        routineOne();
     }
 }
