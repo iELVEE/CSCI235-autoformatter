@@ -45,7 +45,7 @@ bool hpp_to_cpp_ = true;
 */
 bool notWhiteSpace(std::string s)
 {
-    for (const unsigned char& c : s)
+    for (const unsigned char c : s)
     {
         if (!std::isspace(c)){
             return false;
@@ -220,7 +220,7 @@ void addFile(std::vector<std::string>& files, std::string file_name, int& i, boo
 * @param    : boolean for if the list of the files should be printed out to cli
 * @return   : vector of strings of all files in the directory
 */
-std::vector<std::string> selectionMenu(std::string selected_path, bool listMode = false)
+std::vector<std::string> selectionMenuFiles(std::string selected_path, bool listMode = false)
 {
     std::vector<std::string> files;
     int i = 0;
@@ -245,40 +245,80 @@ std::vector<std::string> selectionMenu(std::string selected_path, bool listMode 
 
     if (listMode)
     {
+        if (!files.empty()) {
+            std::cout << "[" << i << "] " << "File not listed" << std::endl;
+        }
         files.push_back("File not listed");
-        std::cout << "[" << i << "] " << "File not listed" << std::endl;
     }
 
     return files;
+}
+
+/** Get the directories of the selected_path and list them out
+ *  @param  : string, path of directory to iterate through list them out
+ *  @return : vector of strings of all the directories present in the selected directory
+ */
+std::vector<std::string> selectionMenuDirectories(std::string selected_path)
+{
+    std::vector<std::string> directories;
+    int i = 0;
+    for (const auto& f : std::filesystem::directory_iterator(selected_path))
+    {
+        if (f.is_directory())
+        {
+            std::string dir_name = f.path().string();
+            //add file works for the given type of object, even if the name is misleading
+            addFile(directories, dir_name, i, true);
+        }
+    }
+
+    if (!directories.empty())
+    {
+        std::cout << "[" << i << "] " << "Directory not listed" << std::endl;
+    }
+    directories.push_back("Directory not listed");
+    
+    return directories;
 }
 
 /** Take a variable number of input files selecting from given files and put them into a vector of selected file names.
  * @param   : vector of strings comprising of all files present in working directory
  * @return  : vector of strings comprising of selected files
 */
-std::vector<std::string> select(std::vector<std::string> files)
+std::vector<std::string> select(std::vector<std::string> files, std::string target)
 {
     std::vector<std::string> inputs;
     int file_index;
-    std::cout << "Please input the indexes of the file(s) you want to format (multiple files are separated by spaces) : ";
-    while (std::cin >> file_index)
+    if (files.size() == 1)
     {
-        //file not listed conditional
-        if (file_index == files.size() - 1) {
-            std::cout << "What file would you like to format : ";
-            std::cin >> files.at(file_index);
-        }
-
-        inputs.push_back(files.at(file_index));
-        //break the infinite cin loop once enter is pressed, failbit prevents non int inputs
-        if (std::iscntrl(std::cin.get()))
+        std::cout << "What " << target << " would you like to format : ";
+        std::cin >> files.at(0);
+        inputs.push_back(files.at(0));
+    }
+    else
+    {
+        std::cout << "Please input the indexes of the " << target << "(s) you want to format (multiple objects are separated by spaces) : ";
+        while (std::cin >> file_index)
         {
-            break;
+            //file not listed conditional
+            if (file_index == (int) files.size() - 1) {
+                std::cout << "What " << target << " would you like to format : ";
+                std::cin >> files.at(file_index);
+            }
+
+            inputs.push_back(files.at(file_index));
+            //break the infinite cin loop once enter is pressed, failbit prevents non int inputs
+            if (std::iscntrl(std::cin.get()))
+            {
+                break;
+            }
         }
     }
+    
 
     return inputs;
 }
+
 
 /** Take an input text file and format it to a doxygen style file.
 * @pre      : text file to read
@@ -286,7 +326,7 @@ std::vector<std::string> select(std::vector<std::string> files)
 */
 void routineOne()
 {
-    std::vector<std::string> files_to_format = select(selectionMenu("./", true));
+    std::vector<std::string> files_to_format = select(selectionMenuFiles("./", true), "file");
     for (const auto& s : files_to_format)
     {
         overwriteFile(s);
@@ -298,15 +338,19 @@ void routineOne()
 */
 void routineTwo()
 {
-    std::string path_name;
-    std::cout << "Please input the path to the desired folder (absolute path or relative, e.g. ./sub_directory/target_directory) : ";
-    std::cin >> path_name;
+    std::cout << "absolute path or relative (e.g. ./sub_directory/target_directory)" << std::endl;
 
-    std::vector<std::string> directory_files = selectionMenu(path_name);
-    for (const auto& s : directory_files)
+    std::vector<std::string> directories = select(selectionMenuDirectories("./"), "directory");
+  
+    for (const auto& d : directories)
     {
-        overwriteFile(s);
+        std::vector<std::string> directory_files = selectionMenuFiles(d);
+        for (const auto& s : directory_files)
+        {
+            overwriteFile(s);
+        }
     }
+    
 }
 
 int main()
