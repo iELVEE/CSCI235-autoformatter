@@ -1,6 +1,6 @@
 # CSCI235-autoformatter
 
-### If you decide to make hpp AND cpp files of the same name, turn hpp_to_cpp to false, so that it does not format the cpp file twice.
+### If you decide to make hpp AND cpp files of the same name, turn hpp_to_cpp to false, so that it does not change your cpp file's contents to the formatted version of the hpp file
 	Meant to be used when copying and pasting project specifications from the CSCI 235 page.
 
 To modify your preferences of the autoformatter, simply edit the following code as needed and then compile:
