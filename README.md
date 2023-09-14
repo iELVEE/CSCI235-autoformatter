@@ -1,6 +1,6 @@
 # CSCI235-autoformatter
 
-### If you decide to make hpp AND cpp files of the same name, turn hpp_to_cpp to false, so that it does not format the cpp file twice.
+### If you decide to make hpp AND cpp files of the same name, turn hpp_to_cpp to false, so that it does not change your cpp file's contents to the formatted version of the hpp file
 	Meant to be used when copying and pasting project specifications from the CSCI 235 page.
 
 To modify your preferences of the autoformatter, simply edit the following code as needed and then compile:
@@ -21,7 +21,7 @@ bool filter_ = true;
 // Display only filtered file types.
 
 Doxs doxygen_style_ = AS_IS;
-// Use the specified doxygen comment style, AS_IS weill leave the comments as is with no modification.
+// Use the specified doxygen comment style, AS_IS will leave the comments as is with no modification.
 
 bool hpp_to_cpp_ = true;
 // If there are hpp files, copy the contents into a corresponding cpp file of the same name, even if the cpp file does not exist.
