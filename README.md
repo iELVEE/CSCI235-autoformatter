@@ -21,7 +21,7 @@ bool filter_ = true;
 // Display only filtered file types.
 
 Doxs doxygen_style_ = AS_IS;
-// Use the specified doxygen comment style, AS_IS weill leave the comments as is with no modification.
+// Use the specified doxygen comment style, AS_IS will leave the comments as is with no modification.
 
 bool hpp_to_cpp_ = true;
 // If there are hpp files, copy the contents into a corresponding cpp file of the same name, even if the cpp file does not exist.
