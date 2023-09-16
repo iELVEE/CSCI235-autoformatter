@@ -32,7 +32,7 @@ bool hpp_to_cpp_ = true;
 
 Documentation style is completely dynamic. Simply add your style to the corresponding maps and the autoformatter will format in that style. Doubling up (formatting the same file twice) will yield undesired results. 
 
-For example: Changing Doxs doxygen_style_ from AS_IS to BANNER will result in the expected formatted file changing from
+For example: Changing "Doxs doxygen_style_" from AS_IS to BANNER will result in the expected formatted file changing from
 
 <img src="https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/ASIS.png" width="400" height="500"> to <img src="https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/BANNER.png" width="400" height="500">
 
