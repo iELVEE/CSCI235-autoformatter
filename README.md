@@ -38,7 +38,7 @@ For example: Changing Doxs doxygen_style_ from AS_IS to BANNER will result in th
 ## GIFs in action
 
 It's annoying to get rid of each empty line between the ones that matter, right?
-<img src="https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/annoying.gif" width="1200" height="600">
+<img src="https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/annoying.gif" width="1066" height="600">
 
 ### Well, now you can get rid of them automatically!
 
