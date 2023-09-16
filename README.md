@@ -1,5 +1,6 @@
 # CSCI235-autoformatter
 
+All you need to download for this to work is "doxygen-formatter.cpp"
 ### If you decide to make hpp AND cpp files of the same name, turn hpp_to_cpp to false, so that it does not change your cpp file's contents to the formatted version of the hpp file
 	Meant to be used when copying and pasting project specifications from the CSCI 235 page.
 
