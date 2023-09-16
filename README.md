@@ -31,4 +31,21 @@ bool hpp_to_cpp_ = true;
 
 Documentation style is completely dynamic. Simply add your style to the corresponding maps and the autoformatter will format in that style. Doubling up (formatting the same file twice) will yield undesired results. 
 
-GIFs showing the use cases of the autoformatter will be added in the near future.
+For example: Changing Doxs doxygen_style_ from AS_IS to BANNER will result in the expected formatted file changing from
+<img src="https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/ASIS.png" width="490" height="600"> to <img src="https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/BANNER.png" width="490" height="600">
+
+## GIFs in action
+
+It's annoying to get rid of each empty line between the ones that matter, right?
+![](https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/annoying.gif)
+
+
+### Well, now you can get rid of them automatically!
+
+Here's modifying a single (or multiple) file(s)!
+![](https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/file-overwrite.gif)
+
+
+Here's modifying a single (or multiple) directory(ies)!
+![](https://github.com/iELVEE/CSCI235-autoformatter/blob/main/README-GIFs/directory-overwrite.gif)
+
